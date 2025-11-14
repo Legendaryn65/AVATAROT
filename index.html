@@ -1,647 +1,735 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta charset="UTF-8" />
   <title>AVATAROT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <style>
     :root {
-      --bg: #050609;
-      --card-bg: radial-gradient(circle at 20% 0%, #1b2a3d, #050609);
-      --accent: #fdd166;
-      --accent-soft: rgba(253, 209, 102, 0.25);
-      --border-subtle: rgba(255, 255, 255, 0.12);
-      --text-main: #f5f5f5;
-      --text-muted: rgba(245,245,245,0.72);
-      --danger: #ff6b81;
+      --bg: #050608;
+      --panel: #101219;
+      --accent: #f5d27c;
+      --accent-soft: rgba(245, 210, 124, 0.15);
+      --text: #f6f6f6;
+      --muted: #a1a5b5;
+      --border: #242733;
+      --radius-lg: 16px;
+      --radius-md: 10px;
     }
 
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
-      margin: 0;
-      padding: 16px 16px 28px;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
-      background: var(--bg);
-      color: var(--text-main);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        sans-serif;
+      background: radial-gradient(circle at top, #1c2030 0, #050608 55%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 16px;
     }
 
-    .app { max-width: 1040px; margin: 0 auto; }
-
-    h1 {
-      font-size: 1.8rem;
-      margin: 0 0 4px;
-      letter-spacing: 0.18em;
+    .app {
+      width: 100%;
+      max-width: 900px;
+      margin: auto;
+      background: linear-gradient(145deg, #080910, #111320);
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(245, 210, 124, 0.3);
+      box-shadow:
+        0 18px 60px rgba(0, 0, 0, 0.75),
+        0 0 30px rgba(245, 210, 124, 0.12);
+      padding: 18px 14px 20px;
     }
 
-    .pill {
-      display: inline-flex;
+    @media (min-width: 720px) {
+      .app {
+        padding: 20px 24px 26px;
+      }
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 6px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--border-subtle);
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      margin-bottom: 10px;
+      margin-bottom: 14px;
     }
 
-    .pill-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: var(--accent);
-      box-shadow: 0 0 12px rgba(253,209,102,0.6);
+    .title {
+      font-size: 20px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .subtitle {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
     }
 
     .controls {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-bottom: 10px;
-    }
-
-    button {
-      flex: 1;
-      padding: 11px 8px;
-      border-radius: 999px;
-      border: none;
-      font-size: 0.95rem;
-      font-weight: 550;
-      letter-spacing: 0.02em;
-      cursor: pointer;
-      touch-action: manipulation;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, #fdd166, #ffb347);
-      color: #160f02;
-      box-shadow: 0 6px 14px rgba(0,0,0,0.35);
-    }
-
-    .btn-secondary {
-      background: rgba(255,255,255,0.04);
-      color: var(--text-main);
-      border: 1px solid var(--border-subtle);
-    }
-
-    .btn-danger {
-      background: rgba(255,107,129,0.12);
-      color: var(--danger);
-      border: 1px solid rgba(255,107,129,0.5);
-    }
-
-    .meta-row {
-      display: flex;
-      justify-content: flex-end;
       align-items: center;
-      margin-bottom: 10px;
-      font-size: 0.8rem;
-      color: var(--text-muted);
+      padding: 10px 10px;
+      border-radius: var(--radius-md);
+      background: radial-gradient(circle at top left, #181a26 0, #060710 60%);
+      border: 1px solid var(--border);
+      margin-bottom: 14px;
     }
 
-    .badge {
-      padding: 3px 9px;
+    .controls label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+    }
+
+    .controls select {
+      background: #151726;
+      color: var(--text);
       border-radius: 999px;
-      border: 1px solid var(--border-subtle);
-      font-size: 0.75rem;
-    }
-
-    .main-layout {
-      margin-top: 10px;
-    }
-
-    .card-display { margin-top: 4px; }
-
-    .tarot-card {
+      border: 1px solid var(--border);
+      padding: 6px 26px 6px 12px;
+      font-size: 12px;
+      outline: none;
+      appearance: none;
       position: relative;
-      border-radius: 18px;
-      padding: 14px 14px 12px;
-      background: var(--card-bg);
-      border: 1px solid var(--accent-soft);
-      box-shadow: 0 14px 30px rgba(0,0,0,0.7);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      overflow: hidden;
     }
 
-    .tarot-card::before {
-      content: "";
-      position: absolute;
-      inset: -40%;
-      background: radial-gradient(circle at 20% 0%, rgba(253,209,102,0.22), transparent 55%);
+    .controls select:focus {
+      border-color: var(--accent);
+    }
+
+    .controls button {
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #141622;
+      color: var(--text);
+      font-size: 12px;
+      padding: 7px 12px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+
+    .controls button.primary {
+      background: radial-gradient(circle at top, #f5d27c 0, #c88c3a 60%);
+      color: #111014;
+      border-color: #f5d27c;
+      font-weight: 600;
+    }
+
+    .controls button:hover {
       opacity: 0.9;
-      pointer-events: none;
     }
 
-    .card-image-wrap {
-      position: relative;
-      width: 100%;
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.16);
-      background: radial-gradient(circle at 20% 0%, #223046, #050609);
-      max-height: 75vh;
+    .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-left: auto;
+    }
+
+    .spread-panel {
+      background: radial-gradient(circle at top, #171927 0, #05060d 60%);
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(245, 210, 124, 0.16);
+      padding: 14px 10px 16px;
+      margin-bottom: 12px;
+    }
+
+    .spread-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 8px;
+    }
+
+    .spread-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+    }
+
+    .spread-meta {
+      font-size: 11px;
+      color: var(--muted);
+      opacity: 0.8;
+    }
+
+    .spread-area {
+      min-height: 200px;
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 10px 4px 2px;
     }
 
-    .card-image-wrap::before {
-      content: "";
-      display: block;
-      padding-top: 190%; /* tall enough for 6-card layout */
-    }
-
-    #cardImg {
-      position: absolute;
-      inset: 0;
+    .spread {
       width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: block;
-      transition: transform 0.15s ease-out;
-      z-index: 5;
-    }
-
-    .spread-overlay {
-      position: absolute;
-      inset: 0;
-      padding: 6px;
-      display: none;
-      z-index: 10;
-    }
-
-    .spread-grid {
-      width: 100%;
-      height: 100%;
-      display: grid;
-      grid-auto-rows: minmax(0, 1fr);
-      gap: 4px;
-      justify-items: center;
+      display: flex;
+      justify-content: center;
       align-items: center;
+      gap: 8px;
+      flex-wrap: nowrap;
     }
 
-    .spread-card {
-      width: 100%;
-      height: 100%;
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.2);
-      background: rgba(0,0,0,0.55);
-      padding: 2px;
+    .card-slot {
+      width: 92px;
+      max-width: 24vw;
+      aspect-ratio: 70 / 120;
+      border-radius: 9px;
+      border: 1px dashed rgba(245, 210, 124, 0.35);
+      background: radial-gradient(circle at top, #191b2a 0, #050610 70%);
       display: flex;
-      flex-direction: column;
-      cursor: pointer;
-      transition: transform 0.12s ease-out, box-shadow 0.12s ease-out, border-color 0.12s;
-    }
-
-    .spread-card:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 10px rgba(0,0,0,0.5);
-      border-color: rgba(253,209,102,0.6);
-    }
-
-    .spread-card-img-wrap {
-      flex: 1;
-      width: 100%;
-      border-radius: 7px;
-      overflow: hidden;
-      background: radial-gradient(circle at 20% 0%, #223046, #050609);
-    }
-
-    .spread-card-img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: block;
-      transition: transform 0.15s ease-out;
-    }
-
-    .tarot-footer {
+      align-items: center;
+      justify-content: center;
       position: relative;
-      font-size: 0.75rem;
-      opacity: 0.7;
-      display: flex;
-      justify-content: flex-end;
-      margin-top: 2px;
+      overflow: hidden;
     }
 
-    /* Floating clarifier inside main box */
-    .floating-clarifier {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      width: 120px;
-      z-index: 40;
-      border-radius: 14px;
-      padding: 6px;
-      background: radial-gradient(circle at 20% 0%, #22293c, #050609);
-      border: 1px solid rgba(255,255,255,0.15);
-      box-shadow: 0 12px 24px rgba(0,0,0,0.65);
-      transition: transform 0.15s ease-out, opacity 0.15s ease-out;
-    }
-
-    .floating-clarifier:hover {
-      transform: translateY(-2px);
-    }
-
-    .floating-clarifier img {
+    .card-slot img {
       width: 100%;
       height: 100%;
-      object-fit: contain;
+      object-fit: cover;
       display: block;
-      border-radius: 10px;
     }
 
-    .toast {
-      position: fixed;
+    .card-slot::after {
+      content: attr(data-label);
+      position: absolute;
+      bottom: 4px;
       left: 50%;
-      bottom: 18px;
-      transform: translateX(-50%) translateY(120%);
-      padding: 8px 14px;
+      transform: translateX(-50%);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: rgba(246, 246, 246, 0.8);
+      text-shadow: 0 0 6px rgba(0, 0, 0, 0.85);
+      padding: 2px 6px;
+      background: linear-gradient(
+        to right,
+        rgba(5, 6, 12, 0.9),
+        rgba(5, 6, 12, 0.1)
+      );
       border-radius: 999px;
-      background: rgba(0,0,0,0.9);
-      color: var(--text-main);
-      font-size: 0.8rem;
-      box-shadow: 0 10px 24px rgba(0,0,0,0.8);
-      opacity: 0;
-      transition: transform 0.25s ease-out, opacity 0.25s ease-out;
-      pointer-events: none;
-      z-index: 50;
+      backdrop-filter: blur(4px);
     }
 
-    .toast.show {
-      transform: translateX(-50%) translateY(0);
-      opacity: 1;
+    .card-slot.placeholder::after {
+      content: "";
+    }
+
+    .card-slot.placeholder {
+      border-style: dotted;
+      opacity: 0.25;
+    }
+
+    /* === SPREAD LAYOUTS === */
+
+    /* Default: flex row for 1, 3, 6 etc */
+    .spread-1,
+    .spread-3,
+    .spread-6 {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    /* 4-card spread: row on desktop, 2x2 on mobile */
+    .spread-4 {
+      display: grid;
+      gap: 10px;
+      justify-items: center;
+    }
+
+    @media (min-width: 721px) {
+      .spread-4 {
+        grid-template-columns: repeat(4, minmax(70px, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .spread-4 {
+        grid-template-columns: repeat(2, minmax(70px, 1fr)); /* 2 top, 2 bottom */
+      }
+    }
+
+    /* 5-card spread: 
+       - desktop: 5 in a row
+       - mobile: 3 columns x 2 rows with one empty slot in top row (for clarifier “pocket”) */
+    .spread-5 {
+      display: grid;
+      gap: 10px;
+      justify-items: center;
+      width: 100%;
+    }
+
+    @media (min-width: 721px) {
+      .spread-5 {
+        grid-template-columns: repeat(5, minmax(70px, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .spread-5 {
+        grid-template-columns: repeat(3, minmax(70px, 1fr));
+      }
+    }
+
+    .spread-5 .card-slot.placeholder {
+      /* invisible but keeps the space */
+      visibility: hidden;
+    }
+
+    /* 6-card spread (3 x 2 grid) */
+    .spread-6 {
+      display: grid;
+      gap: 10px;
+      justify-items: center;
+      width: 100%;
+    }
+
+    @media (min-width: 721px) {
+      .spread-6 {
+        grid-template-columns: repeat(6, minmax(70px, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .spread-6 {
+        grid-template-columns: repeat(3, minmax(70px, 1fr));
+      }
+    }
+
+    /* === Clarifiers === */
+
+    .clarifier-section {
+      margin-top: 6px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: radial-gradient(circle at top, #151726 0, #05060f 70%);
+      padding: 8px 10px 10px;
+    }
+
+    .clarifier-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+
+    .clarifier-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+
+    .clarifier-toggle {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-size: 11px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .clarifier-toggle-icon {
+      display: inline-block;
+      transition: transform 0.18s ease;
+    }
+
+    .clarifier-toggle.open .clarifier-toggle-icon {
+      transform: rotate(180deg);
+    }
+
+    .clarifier-row {
+      display: flex;
+      gap: 6px;
+      padding-top: 6px;
+      overflow: hidden;
+      transition: max-height 0.18s ease;
+      max-height: 0;
+    }
+
+    .clarifier-row.expanded {
+      max-height: 140px; /* enough to show 1 row of small cards */
+    }
+
+    .clarifier-card-slot {
+      width: 64px;
+      max-width: 18vw;
+      aspect-ratio: 70 / 120;
+      border-radius: 8px;
+      border: 1px solid rgba(245, 210, 124, 0.45);
+      background: radial-gradient(circle at top, #191b2a 0, #05060f 70%);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .clarifier-card-slot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .clarifier-card-slot::after {
+      content: attr(data-label);
+      position: absolute;
+      bottom: 3px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 7px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: rgba(246, 246, 246, 0.9);
+      padding: 1px 4px;
+      background: rgba(5, 6, 12, 0.9);
+      border-radius: 999px;
+      max-width: 95%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .clarifier-empty-hint {
+      font-size: 11px;
+      color: var(--muted);
+      opacity: 0.75;
+      padding-top: 6px;
+    }
+
+    /* Small helper text under controls */
+    .helper-text {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 3px;
+      opacity: 0.8;
     }
   </style>
 </head>
+
 <body>
   <div class="app">
-    <div class="pill">
-      <div class="pill-dot"></div>
-      AVATAROT • Pocket Deck
-    </div>
-
-    <h1>AVATAROT</h1>
-
-    <!-- main controls -->
-    <div class="controls">
-      <button id="shuffleBtn" class="btn-primary">Shuffle</button>
-      <button id="drawBtn" class="btn-secondary">+1 clarifier</button>
-      <button id="resetBtn" class="btn-danger">Reset deck</button>
-    </div>
-
-    <!-- spread controls -->
-    <div class="controls">
-      <button id="spread2Btn" class="btn-secondary">2-card spread</button>
-      <button id="spread3Btn" class="btn-secondary">3-card spread</button>
-      <button id="spread4Btn" class="btn-secondary">4-card spread</button>
-      <button id="spread5Btn" class="btn-secondary">5-card spread</button>
-      <button id="spreadPyramidBtn" class="btn-secondary">6-card spread</button>
-      <button id="clearSpreadBtn" class="btn-danger">Clear spread</button>
-    </div>
-
-    <div class="meta-row">
-      <div class="badge" id="statusBadge">Fresh deck</div>
-    </div>
-
-    <div class="main-layout">
-      <div class="card-display">
-        <div class="tarot-card" id="cardView">
-          <!-- floating clarifier lives here -->
-          <div id="floatingClarifier"></div>
-
-          <div class="card-image-wrap">
-            <img id="cardImg" alt="Avatarot card" src="">
-            <div class="spread-overlay" id="spreadOverlay">
-              <div class="spread-grid" id="spreadGrid"></div>
-            </div>
-          </div>
-
-          <div class="tarot-footer">
-            <span id="spreadCount">0 in spread</span>
-          </div>
-        </div>
+    <header>
+      <div>
+        <div class="title">AVATAROT</div>
+        <div class="subtitle">Elemental Tarot Engine</div>
       </div>
+    </header>
+
+    <section class="controls">
+      <label for="spreadSelect">Spread</label>
+      <select id="spreadSelect">
+        <option value="1">Single Card</option>
+        <option value="3">3&nbsp;Card</option>
+        <option value="4">4&nbsp;Card</option>
+        <option value="5">5&nbsp;Card</option>
+        <option value="6">6&nbsp;Card</option>
+      </select>
+
+      <div class="controls-row">
+        <button id="drawBtn" class="primary">Draw Spread</button>
+        <button id="clarifierBtn">Add Clarifier</button>
+        <button id="resetBtn">Reset</button>
+      </div>
+    </section>
+    <div class="helper-text">
+      Clarifier pile holds up to 5 cards. When you add a 6th, the oldest card
+      is released.
     </div>
+
+    <section class="spread-panel">
+      <div class="spread-header">
+        <div class="spread-title">Current Spread</div>
+        <div class="spread-meta" id="spreadMeta">No cards drawn yet</div>
+      </div>
+      <div id="spreadArea" class="spread-area">
+        <!-- Cards will be injected here -->
+      </div>
+    </section>
+
+    <section class="clarifier-section">
+      <div class="clarifier-header">
+        <div class="clarifier-label">Clarifier Pile (max 5)</div>
+        <button id="clarifierToggle" class="clarifier-toggle">
+          <span>Collapse / Expand</span>
+          <span class="clarifier-toggle-icon">▾</span>
+        </button>
+      </div>
+      <div id="clarifierRow" class="clarifier-row">
+        <!-- Clarifier cards injected here -->
+      </div>
+      <div id="clarifierEmptyHint" class="clarifier-empty-hint">
+        No clarifiers yet. Tap “Add Clarifier” after your main spread.
+      </div>
+    </section>
   </div>
 
-  <div class="toast" id="toast"></div>
-
   <script>
-    // Deck data
-    const fullDeck = [
-      { id: 0, name: "The Fool (Aang)", img: "fool_aang.png" },
-      { id: 1, name: "The Magician (Avatar State Aang)", img: "magician_aang.png" },
-      { id: 2, name: "The High Priestess (Yue)", img: "high_priestess_yue.png" },
-      { id: 3, name: "The Empress (Katara)", img: "empress_katara.png" },
-      { id: 4, name: "The Emperor (Zuko)", img: "emperor_zuko.png" },
-      { id: 5, name: "The Hierophant (Guru Pathik)", img: "hierophant_pathik.png" },
-      { id: 6, name: "The Lovers (Sokka & Suki)", img: "lovers_sokka_suki.png" },
-      { id: 7, name: "The Chariot (Appa)", img: "chariot_appa.png" },
-      { id: 8, name: "Strength (Azula)", img: "strength_azula.png" },
-      { id: 9, name: "The Hermit (Gyatso)", img: "hermit_gyasto.png" },   // filename fixed
-      { id: 10, name: "Wheel of Fortune", img: "wheel_of_fortune.png" },
-      { id: 11, name: "Justice (Kyoshi)", img: "justice_kyoshi.png" },
-      { id: 12, name: "The Hanged Man (Bumi)", img: "hanged_man_bumi.png" },
-      { id: 13, name: "Death (Iroh)", img: "death_iroh.png" },
-      { id: 14, name: "Temperance (Iroh Tea)", img: "temperance_iroh_tea.png" },
-      { id: 15, name: "The Devil (Ozai)", img: "devil_ozai.png" },
-      { id: 16, name: "The Tower (Ba Sing Se)", img: "tower_ba_sing_se.png" },
-      { id: 17, name: "The Star", img: "star.png" },
-      { id: 18, name: "The Moon", img: "moon.png" },
-      { id: 19, name: "The Sun", img: "sun.png" },
-      { id: 20, name: "Judgement (Lion Turtle)", img: "judgement_lion_turtle.png" },
-      { id: 21, name: "The World (4 Nations Map)", img: "world_map.png" },
-      { id: 22, name: "Ace of Wands", img: "ace_wands.png" },
-      { id: 23, name: "Two of Wands", img: "two_wands.png" },
-      { id: 24, name: "Three of Wands", img: "three_wands.png" },
-      { id: 25, name: "Four of Wands", img: "four_wands.png" },
-      { id: 26, name: "Five of Wands", img: "five_wands.png" },
-      { id: 27, name: "Six of Wands", img: "six_wands.png" },
-      { id: 28, name: "Seven of Wands", img: "seven_wands.png" },
-      { id: 29, name: "Eight of Wands", img: "eight_wands.png" },
-      { id: 30, name: "Nine of Wands", img: "nine_wands.png" },
-      { id: 31, name: "Ten of Wands", img: "ten_wands.png" },
-      { id: 32, name: "Page of Wands", img: "page_wands.png" },
-      { id: 33, name: "Knight of Wands", img: "knight_wands.png" },
-      { id: 34, name: "Queen of Wands", img: "queen_wands.png" },
-      { id: 35, name: "King of Wands", img: "king_wands.png" },
-      { id: 36, name: "Ace of Cups", img: "ace_cups.png" },
-      { id: 37, name: "Two of Cups", img: "two_cups.png" },
-      { id: 38, name: "Three of Cups", img: "three_cups.png" },
-      { id: 39, name: "Four of Cups", img: "four_cups.png" },
-      { id: 40, name: "Five of Cups", img: "five_cups.png" },
-      { id: 41, name: "Six of Cups", img: "six_cups.png" },
-      { id: 42, name: "Seven of Cups", img: "seven_cups.png" },
-      { id: 43, name: "Eight of Cups", img: "eight_cups.png" },
-      { id: 44, name: "Nine of Cups", img: "nine_cups.png" },
-      { id: 45, name: "Ten of Cups", img: "ten_cups.png" },
-      { id: 46, name: "Page of Cups", img: "page_cups.png" },
-      { id: 47, name: "Knight of Cups", img: "knight_cups.png" },
-      { id: 48, name: "Queen of Cups", img: "queen_cups.png" },
-      { id: 49, name: "King of Cups", img: "king_cups.png" },
-      { id: 50, name: "Ace of Swords", img: "ace_swords.png" },
-      { id: 51, name: "Two of Swords", img: "two_swords.png" },
-      { id: 52, name: "Three of Swords", img: "three_swords.png" },
-      { id: 53, name: "Four of Swords", img: "four_swords.png" },
-      { id: 54, name: "Five of Swords", img: "five_swords.png" },
-      { id: 55, name: "Six of Swords", img: "six_swords.png" },
-      { id: 56, name: "Seven of Swords", img: "seven_swords.png" },
-      { id: 57, name: "Eight of Swords", img: "eight_swords.png" },
-      { id: 58, name: "Nine of Swords", img: "nine_swords.png" },
-      { id: 59, name: "Ten of Swords", img: "ten_swords.png" },
-      { id: 60, name: "Page of Swords", img: "page_swords.png" },
-      { id: 61, name: "Knight of Swords", img: "knight_swords.png" },
-      { id: 62, name: "Queen of Swords", img: "queen_swords.png" },
-      { id: 63, name: "King of Swords", img: "king_swords.png" },
-      { id: 64, name: "Ace of Pentacles", img: "ace_pentacles.png" },
-      { id: 65, name: "Two of Pentacles", img: "two_pentacles.png" },
-      { id: 66, name: "Three of Pentacles", img: "three_pentacles.png" },
-      { id: 67, name: "Four of Pentacles", img: "four_pentacles.png" },
-      { id: 68, name: "Five of Pentacles", img: "five_pentacles.png" },
-      { id: 69, name: "Six of Pentacles", img: "six_pentacles.png" },
-      { id: 70, name: "Seven of Pentacles", img: "seven_pentacles.png" },
-      { id: 71, name: "Eight of Pentacles", img: "eight_pentacles.png" },
-      { id: 72, name: "Nine of Pentacles", img: "nine_pentacles.png" },
-      { id: 73, name: "Ten of Pentacles", img: "ten_pentacles.png" },
-      { id: 74, name: "Page of Pentacles", img: "page_pentacles.png" },
-      { id: 75, name: "Knight of Pentacles", img: "knight_pentacles.png" },
-      { id: 76, name: "Queen of Pentacles", img: "queen_pentacles.png" },
-      { id: 77, name: "King of Pentacles", img: "king_pentacles.png" }
+    // ==========================================================
+    //  1) DECK SETUP
+    // ==========================================================
+    // IMPORTANT:
+    // Replace this dummy deck with your REAL deck array from your old file.
+    //
+    // You probably already have something like:
+    //   const deck = [{ name: 'The Fool', img: 'img/fool.png' }, ...]
+    //
+    // Just copy that part from your old index.html and paste it
+    // in place of the "dummy" deck below, keeping the variable
+    // name EXACTLY "deck".
+
+    const deck = [
+      // 🔻🔻🔻 REPLACE EVERYTHING INSIDE THIS ARRAY WITH YOUR REAL CARDS 🔻🔻🔻
+      // Example format:
+      // { name: 'The Fool', img: 'cards/fool.png' },
+      // { name: 'The Magician', img: 'cards/magician.png' },
+      // ...
+      {
+        name: "Placeholder Card",
+        img: ""
+      }
+      // 🔺🔺🔺 REPLACE EVERYTHING ABOVE WITH YOUR REAL DECK ARRAY 🔺🔺🔺
     ];
 
-    let deck = [];
-    let spread = [];       // [{card, revealed}]
-    let spreadType = null; // 'line' or 'pyramid6'
-    let lastClarifier = null;
+    // ==========================================================
+    //  2) STATE
+    // ==========================================================
 
-    const shuffleBtn = document.getElementById('shuffleBtn');
-    const drawBtn = document.getElementById('drawBtn');
-    const resetBtn = document.getElementById('resetBtn');
+    let workingDeck = [];
+    let spreadCards = [];
+    let clarifiers = [];
 
-    const spread2Btn = document.getElementById('spread2Btn');
-    const spread3Btn = document.getElementById('spread3Btn');
-    const spread4Btn = document.getElementById('spread4Btn');
-    const spread5Btn = document.getElementById('spread5Btn');
-    const spreadPyramidBtn = document.getElementById('spreadPyramidBtn');
-    const clearSpreadBtn = document.getElementById('clearSpreadBtn');
+    const spreadSelect = document.getElementById("spreadSelect");
+    const spreadArea = document.getElementById("spreadArea");
+    const spreadMeta = document.getElementById("spreadMeta");
 
-    const statusBadge = document.getElementById('statusBadge');
-    const toast = document.getElementById('toast');
-    const cardImg = document.getElementById('cardImg');
+    const drawBtn = document.getElementById("drawBtn");
+    const clarifierBtn = document.getElementById("clarifierBtn");
+    const resetBtn = document.getElementById("resetBtn");
 
-    const spreadOverlay = document.getElementById('spreadOverlay');
-    const spreadGrid = document.getElementById('spreadGrid');
-    const spreadCount = document.getElementById('spreadCount');
-    const floatingClarifier = document.getElementById('floatingClarifier');
+    const clarifierRow = document.getElementById("clarifierRow");
+    const clarifierEmptyHint = document.getElementById("clarifierEmptyHint");
+    const clarifierToggle = document.getElementById("clarifierToggle");
+    const clarifierToggleIcon = clarifierToggle.querySelector(
+      ".clarifier-toggle-icon"
+    );
 
-    function showToast(message) {
-      toast.textContent = message;
-      toast.classList.add('show');
-      setTimeout(() => {
-        toast.classList.remove('show');
-      }, 1700);
-    }
+    // ==========================================================
+    //  3) UTILITIES
+    // ==========================================================
 
-    function drawFromDeck() {
-      if (deck.length === 0) return null;
-      const card = deck.pop();
-      card.reversed = Math.random() < 0.5;
-      return card;
-    }
-
-    function showCardBack() {
-      cardImg.src = 'avatarot_back.png';
-      cardImg.style.transform = 'none';
-    }
-
-    function resetDeck() {
-      deck = [...fullDeck];
-      spread = [];
-      spreadType = null;
-      lastClarifier = null;
-      renderSpread();
-      renderClarifier();
-      showCardBack();
-      spreadCount.textContent = '0 in spread';
-      statusBadge.textContent = 'Fresh deck';
-      showToast('Deck reset');
-    }
-
-    function shuffleDeck() {
-      if (deck.length === 0) deck = [...fullDeck];
-      for (let i = deck.length - 1; i > 0; i--) {
+    function shuffle(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [deck[i], deck[j]] = [deck[j], deck[i]];
+        [arr[i], arr[j]] = [arr[j], arr[i]];
       }
-      statusBadge.textContent = 'Shuffled';
-      showToast('Deck shuffled');
+      return arr;
     }
 
-    function drawClarifier() {
-      if (deck.length === 0) {
-        showToast('Deck is empty – reset to draw again');
-        statusBadge.textContent = 'Empty deck';
-        return;
+    function resetDeck(keepSpread = false) {
+      workingDeck = shuffle(deck);
+      if (!keepSpread) {
+        spreadCards = [];
       }
-      const card = drawFromDeck();
-      lastClarifier = card;
-      renderClarifier();
-      showCardInMainView(card);
-      statusBadge.textContent = 'Clarifier drawn';
-      showToast('Clarifier drawn');
-    }
-
-    function drawSpread(count, type) {
-      if (deck.length === 0) {
-        showToast('Deck is empty – reset to draw again');
-        statusBadge.textContent = 'Empty deck';
-        return;
-      }
-      if (deck.length < count) {
-        showToast('Not enough cards left for that spread');
-        return;
-      }
-      spreadType = type || 'line';
-      spread = [];
-      for (let i = 0; i < count; i++) {
-        const card = drawFromDeck();
-        spread.push({ card, revealed: false });
-      }
+      clarifiers = [];
       renderSpread();
-      showCardBack();
-      statusBadge.textContent = 'Spread set';
-      showToast(count + '-card spread ready – tap to reveal');
+      renderClarifiers();
+      spreadMeta.textContent = "Deck reset. No cards drawn yet.";
     }
 
-    function clearSpread() {
-      spread = [];
-      spreadType = null;
-      renderSpread();
-      showToast('Spread cleared');
-      if (lastClarifier) {
-        showCardInMainView(lastClarifier);
-      } else {
-        showCardBack();
+    function drawCard() {
+      if (workingDeck.length === 0) {
+        workingDeck = shuffle(deck);
       }
+      return workingDeck.pop();
     }
 
-    function revealCardAt(index) {
-      const slot = spread[index];
-      if (!slot || slot.revealed) return;
-      slot.revealed = true;
-      renderSpread();
-      showCardInMainView(slot.card);
-      statusBadge.textContent = 'Revealed card ' + (index + 1);
-    }
+    // ==========================================================
+    //  4) SPREAD DRAW + RENDER
+    // ==========================================================
 
-    function showCardInMainView(card) {
-      if (card.img) {
-        cardImg.src = card.img;
-      } else {
-        cardImg.src = 'avatarot_back.png';
+    function drawSpread() {
+      const size = parseInt(spreadSelect.value, 10);
+      spreadCards = [];
+
+      for (let i = 0; i < size; i++) {
+        spreadCards.push(drawCard());
       }
-      cardImg.style.transform = card.reversed ? 'rotate(180deg)' : 'none';
+
+      renderSpread();
+      spreadMeta.textContent = `${size}-card spread drawn.`;
+    }
+
+    function createCardSlot(card, isPlaceholder = false) {
+      const slot = document.createElement("div");
+      slot.classList.add("card-slot");
+      if (isPlaceholder) {
+        slot.classList.add("placeholder");
+        slot.dataset.label = "";
+      } else if (card) {
+        slot.dataset.label = card.name || "";
+        if (card.img && card.img.trim() !== "") {
+          const img = document.createElement("img");
+          img.src = card.img;
+          img.alt = card.name || "Card";
+          slot.appendChild(img);
+        }
+      }
+      return slot;
     }
 
     function renderSpread() {
-      spreadGrid.innerHTML = '';
+      spreadArea.innerHTML = "";
 
-      if (spread.length === 0) {
-        spreadOverlay.style.display = 'none';
-        cardImg.style.display = 'block';
-        spreadCount.textContent = '0 in spread';
+      if (!spreadCards.length) {
+        const msg = document.createElement("div");
+        msg.style.fontSize = "12px";
+        msg.style.color = "#a1a5b5";
+        msg.style.textAlign = "center";
+        msg.textContent =
+          "Use “Draw Spread” to pull cards from your AVATAROT deck.";
+        spreadArea.appendChild(msg);
         return;
       }
 
-      spreadOverlay.style.display = 'block';
-      cardImg.style.display = 'none';
+      const size = spreadCards.length;
+      const spreadContainer = document.createElement("div");
+      spreadContainer.classList.add("spread", `spread-${size}`);
 
-      if (spreadType === 'pyramid6') {
-        spreadGrid.style.gridTemplateColumns = 'repeat(3, 1fr)';
+      if (size === 4) {
+        // Straight-forward: 4 cards, the CSS handles layout
+        spreadCards.forEach((card) => {
+          spreadContainer.appendChild(createCardSlot(card));
+        });
+      } else if (size === 5) {
+        // 5-card special layout:
+        // For mobile: 3 columns x 2 rows:
+        // Row 1: Card 1, Card 2, [EMPTY PLACEHOLDER]
+        // Row 2: Card 3, Card 4, Card 5
+        // On desktop: 5 in a row; placeholder falls to next line but is invisible.
+
+        if (spreadCards[0])
+          spreadContainer.appendChild(createCardSlot(spreadCards[0]));
+        if (spreadCards[1])
+          spreadContainer.appendChild(createCardSlot(spreadCards[1]));
+
+        // Empty slot to "reserve" space visually for clarifier pocket on mobile
+        spreadContainer.appendChild(createCardSlot(null, true));
+
+        if (spreadCards[2])
+          spreadContainer.appendChild(createCardSlot(spreadCards[2]));
+        if (spreadCards[3])
+          spreadContainer.appendChild(createCardSlot(spreadCards[3]));
+        if (spreadCards[4])
+          spreadContainer.appendChild(createCardSlot(spreadCards[4]));
       } else {
-        const cols = Math.max(1, spread.length); // 2–5 in one line
-        spreadGrid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+        // 1, 3, 6 handled generically
+        spreadCards.forEach((card) => {
+          spreadContainer.appendChild(createCardSlot(card));
+        });
       }
 
-      spread.forEach((slot, index) => {
-        const wrap = document.createElement('div');
-        wrap.className = 'spread-card';
+      spreadArea.appendChild(spreadContainer);
+    }
 
-        if (spreadType === 'pyramid6') {
-          const map = [
-            { row: 1, col: 1 },
-            { row: 1, col: 2 },
-            { row: 1, col: 3 },
-            { row: 2, col: 1 },
-            { row: 2, col: 2 },
-            { row: 2, col: 3 }
-          ];
-          const pos = map[index] || { row: 2, col: 2 };
-          wrap.style.gridRow = pos.row;
-          wrap.style.gridColumn = pos.col;
-        } else {
-          wrap.style.gridRow = '1';
+    // ==========================================================
+    //  5) CLARIFIERS
+    // ==========================================================
+
+    function addClarifier() {
+      if (!spreadCards.length) {
+        // no main spread yet; still allow clarifier but update meta
+        spreadMeta.textContent = "Clarifier drawn without main spread.";
+      }
+
+      const card = drawCard();
+      clarifiers.push(card);
+
+      // Limit to 5, remove the oldest when the 6th is added
+      if (clarifiers.length > 5) {
+        clarifiers.shift();
+      }
+
+      renderClarifiers();
+
+      // Auto-expand clarifier section the first time it gets cards
+      if (!clarifierRow.classList.contains("expanded")) {
+        clarifierRow.classList.add("expanded");
+        clarifierToggle.classList.add("open");
+      }
+    }
+
+    function renderClarifiers() {
+      clarifierRow.innerHTML = "";
+
+      if (!clarifiers.length) {
+        clarifierEmptyHint.style.display = "block";
+        return;
+      }
+
+      clarifierEmptyHint.style.display = "none";
+
+      clarifiers.forEach((card) => {
+        const slot = document.createElement("div");
+        slot.classList.add("clarifier-card-slot");
+        slot.dataset.label = card.name || "";
+
+        if (card.img && card.img.trim() !== "") {
+          const img = document.createElement("img");
+          img.src = card.img;
+          img.alt = card.name || "Clarifier card";
+          slot.appendChild(img);
         }
 
-        const imgWrap = document.createElement('div');
-        imgWrap.className = 'spread-card-img-wrap';
-
-        const img = document.createElement('img');
-        img.className = 'spread-card-img';
-
-        if (slot.revealed && slot.card.img) {
-          img.src = slot.card.img;
-        } else {
-          img.src = 'avatarot_back.png';
-        }
-        img.alt = '';
-        img.style.transform = slot.revealed && slot.card.reversed ? 'rotate(180deg)' : 'none';
-
-        imgWrap.appendChild(img);
-        wrap.appendChild(imgWrap);
-        wrap.addEventListener('click', () => revealCardAt(index));
-
-        spreadGrid.appendChild(wrap);
+        clarifierRow.appendChild(slot);
       });
-
-      spreadCount.textContent = spread.length + ' in spread';
     }
 
-    function renderClarifier() {
-      floatingClarifier.innerHTML = '';
-      floatingClarifier.className = 'floating-clarifier';
+    // ==========================================================
+    //  6) CLARIFIER COLLAPSE / EXPAND
+    // ==========================================================
 
-      const img = document.createElement('img');
-      if (!lastClarifier) {
-        img.src = 'avatarot_back.png';
-        img.style.opacity = '0.5';
+    clarifierToggle.addEventListener("click", () => {
+      const expanded = clarifierRow.classList.toggle("expanded");
+      if (expanded) {
+        clarifierToggle.classList.add("open");
       } else {
-        img.src = lastClarifier.img || 'avatarot_back.png';
-        img.style.transform = lastClarifier.reversed ? 'rotate(180deg)' : 'none';
+        clarifierToggle.classList.remove("open");
       }
-      img.alt = '';
-      floatingClarifier.appendChild(img);
-    }
+    });
 
-    // Wire up buttons
-    shuffleBtn.addEventListener('click', shuffleDeck);
-    drawBtn.addEventListener('click', drawClarifier);
-    resetBtn.addEventListener('click', resetDeck);
+    // ==========================================================
+    //  7) BUTTON EVENTS
+    // ==========================================================
 
-    spread2Btn.addEventListener('click', () => drawSpread(2, 'line'));
-    spread3Btn.addEventListener('click', () => drawSpread(3, 'line'));
-    spread4Btn.addEventListener('click', () => drawSpread(4, 'line'));
-    spread5Btn.addEventListener('click', () => drawSpread(5, 'line'));
-    spreadPyramidBtn.addEventListener('click', () => drawSpread(6, 'pyramid6'));
-
-    clearSpreadBtn.addEventListener('click', clearSpread);
+    drawBtn.addEventListener("click", drawSpread);
+    clarifierBtn.addEventListener("click", addClarifier);
+    resetBtn.addEventListener("click", () => resetDeck(false));
 
     // Init
-    resetDeck();
+    resetDeck(false);
   </script>
 </body>
 </html>
