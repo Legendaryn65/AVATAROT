@@ -454,7 +454,7 @@
     }
 
     function showCardBack() {
-      cardImg.src = 'backs/avatarot_back.png';
+      cardImg.src = 'avatarot_back.png';
       cardImg.style.transform = 'none';
     }
 
@@ -542,7 +542,7 @@
       if (card.img) {
         cardImg.src = card.img;
       } else {
-        cardImg.src = 'backs/avatarot_back.png';
+        cardImg.src = 'avatarot_back.png';
       }
       cardImg.style.transform = card.reversed ? 'rotate(180deg)' : 'none';
     }
@@ -596,7 +596,7 @@
         if (slot.revealed && slot.card.img) {
           img.src = slot.card.img;
         } else {
-          img.src = 'backs/avatarot_back.png';
+          img.src = 'avatarot_back.png';
         }
         img.alt = '';
         img.style.transform = slot.revealed && slot.card.reversed ? 'rotate(180deg)' : 'none';
@@ -617,10 +617,10 @@
 
       const img = document.createElement('img');
       if (!lastClarifier) {
-        img.src = 'backs/avatarot_back.png';
+        img.src = 'avatarot_back.png';
         img.style.opacity = '0.5';
       } else {
-        img.src = lastClarifier.img || 'backs/avatarot_back.png';
+        img.src = lastClarifier.img || 'avatarot_back.png';
         img.style.transform = lastClarifier.reversed ? 'rotate(180deg)' : 'none';
       }
       img.alt = '';
